@@ -1,6 +1,6 @@
-# IT0049 Technical Formative Assessment 4
+# IT0049 Complete Point-of-Sale System
 
-This CodeIgniter 4 POS application continues TFA3 with login authentication, protected customer and user account pages, server-side validation, and user avatars.
+This CodeIgniter 4 application provides authenticated staff workflows for products, inventory, customers, staff accounts, recording sales, and sales history.
 
 ## Requirements
 
@@ -11,23 +11,23 @@ This CodeIgniter 4 POS application continues TFA3 with login authentication, pro
 ## Local setup
 
 1. Run `composer install` in the project root if needed.
-2. Start MySQL and import `database/pos_tfa4_export.sql` into the TFA4 database. With XAMPP on Windows:
+2. Create the `pos_midterm` database and run the application migration and seeder:
 
    ```powershell
-   & 'C:\xampp\mysql\bin\mysql.exe' --user=root --execute="source database/pos_tfa4_export.sql"
+   php spark migrate
+   php spark db:seed MidtermSeeder
    ```
 
-   The export creates/uses `pos_tfa4`, including the password column and hashed passwords. Do not re-import it over existing tables unless replacing that database is intended.
-3. Copy `.env.example` to `.env` if needed. Set `app.baseURL` and the `database.default.*` values. This project is configured for the separate `pos_tfa4` database.
+   The migration creates the complete `pos_midterm` schema, and the seeder adds demo data.
+3. Copy `.env.example` to `.env` if needed. Set `app.baseURL` and the `database.default.*` values. This project uses `pos_midterm`.
 4. Run `php spark serve` and open `http://localhost:8080/`.
 
 The document root for another web server must be `public/`. Uploaded avatars are stored in `public/uploads`; the folder is included in the project with an `index.html` placeholder.
 
 ## Routes and testing
 
-- `/`, `/about`, and `/login` are public.
-- `/customers`, `/customers/new`, and `/customers/{id}/edit` require login.
-- `/users`, `/users/new`, and `/users/{id}/edit` require login.
+- `/` and `/login` are public.
+- All product, customer, staff, sale, and sales-history routes require login.
 - `/logout` destroys the current session and redirects to `/login`.
 
 Customer full name and email are required, and email must be valid. User username, full name, and (for new users) password are required; usernames must be unique. Avatars accept JPG or PNG files up to 2 MB; files receive a random safe filename and only that filename is stored in the database. Existing user passwords can be changed on the edit form, or left blank to keep the current password.
@@ -55,8 +55,8 @@ For browser testing, open each new route, submit blank and invalid values to con
 
 ## Database files
 
-`database/pos_tfa4_export.sql` is the TFA4 schema/data export for `pos_tfa4`, including the non-plain-text `users.password` column and sample password hashes. To generate a fresh export from a populated database:
+`database/midterm_pos_export.sql` is the complete schema/data export for `pos_midterm`, including sample password hashes.
 
 ```powershell
-& 'C:\xampp\mysql\bin\mysqldump.exe' --user=root --databases pos_tfa4 --skip-add-drop-table --result-file=database/pos_tfa4_export.sql
+& 'C:\xampp\mysql\bin\mysqldump.exe' --user=root --databases pos_midterm --skip-add-drop-table --result-file=database/midterm_pos_export.sql
 ```

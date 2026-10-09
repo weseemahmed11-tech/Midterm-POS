@@ -77,6 +77,15 @@ class Users extends BaseController
         return redirect()->to('/users')->with('message', 'User updated successfully.');
     }
 
+    public function delete(int $id)
+    {
+        $model = new UserModel();
+        if ($model->find($id) === null) throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound();
+        if ((int) session()->get('user.id') === $id) return redirect()->to('/users')->with('error', 'You cannot delete the account currently in use.');
+        $model->delete($id);
+        return redirect()->to('/users')->with('message', 'User deleted successfully.');
+    }
+
     private function validateUser(UserModel $model, ?int $id = null): bool
     {
         $rules = [

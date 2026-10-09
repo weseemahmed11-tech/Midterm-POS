@@ -19,7 +19,7 @@
                         <td data-label="Full Name"><?= esc($customer['full_name']) ?></td>
                         <td data-label="Email"><?= esc($customer['email']) ?></td>
                         <td data-label="Phone"><?= esc($customer['phone']) ?></td>
-                        <td data-label="Actions"><a class="button button-small button-secondary" href="<?= site_url('customers/' . $customer['id'] . '/edit') ?>">Edit</a></td>
+                        <td data-label="Actions"><a class="button button-small button-secondary" href="<?= site_url('customers/' . $customer['id'] . '/edit') ?>">Edit</a> <form class="inline-form" method="post" action="<?= site_url('customers/' . $customer['id'] . '/delete') ?>"><button class="button button-small button-danger" type="submit">Delete</button></form></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

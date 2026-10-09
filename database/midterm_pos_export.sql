@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS `pos_midterm` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `pos_midterm`;
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `sales`, `products`, `customers`, `users`;
+SET FOREIGN_KEY_CHECKS=1;
+CREATE TABLE `products` (`id` int unsigned NOT NULL AUTO_INCREMENT, `name` varchar(150) NOT NULL, `price` decimal(10,2) NOT NULL, `stock_quantity` int unsigned NOT NULL, `image` varchar(255) DEFAULT NULL, `archived_at` datetime DEFAULT NULL, `created_at` datetime NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `customers` (`id` int unsigned NOT NULL AUTO_INCREMENT, `full_name` varchar(150) NOT NULL, `email` varchar(150) NOT NULL, `phone` varchar(50) DEFAULT NULL, `created_at` datetime NOT NULL, PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `users` (`id` int unsigned NOT NULL AUTO_INCREMENT, `username` varchar(80) NOT NULL, `full_name` varchar(150) NOT NULL, `password` varchar(255) NOT NULL, `avatar` varchar(255) DEFAULT NULL, `created_at` datetime NOT NULL, PRIMARY KEY (`id`), UNIQUE KEY `users_username_unique` (`username`)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE `sales` (`id` int unsigned NOT NULL AUTO_INCREMENT, `product_id` int unsigned NOT NULL, `customer_id` int unsigned DEFAULT NULL, `sold_by` int unsigned NOT NULL, `quantity` int unsigned NOT NULL, `total_price` decimal(10,2) NOT NULL, `created_at` datetime NOT NULL, PRIMARY KEY (`id`), KEY `sales_product_id_foreign` (`product_id`), KEY `sales_customer_id_foreign` (`customer_id`), KEY `sales_sold_by_foreign` (`sold_by`), CONSTRAINT `sales_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE, CONSTRAINT `sales_customer_id_foreign` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE, CONSTRAINT `sales_sold_by_foreign` FOREIGN KEY (`sold_by`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+INSERT INTO `users` VALUES (1,'jdelacruz','Juan Dela Cruz','$2y$10$vTVfd1OTxrs04.D.EcT50uzSfOLpCd77hgxyy.bzIhFcVK7CpeemO',NULL,NOW());
+INSERT INTO `customers` (`full_name`,`email`,`phone`,`created_at`) VALUES ('Maria Santos','maria@example.com','09171234567',NOW()),('Pedro Reyes','pedro@example.com','09179876543',NOW());
+INSERT INTO `products` (`name`,`price`,`stock_quantity`,`created_at`) VALUES ('Classic Burger',125.00,25,NOW()),('French Fries',75.00,40,NOW()),('Iced Tea',55.00,50,NOW()),('Chicken Sandwich',145.00,20,NOW());
